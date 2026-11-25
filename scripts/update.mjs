@@ -122,7 +122,7 @@ async function main() {
   out = out.replace('{{DAILY_TEXT}}', esc(daily.x));
   out = out.replace('{{CARDS}}', cardsHtml);
   out = out.replace('{{RANK}}', rankHtml);
-  out = out.replace('{{UPDATED}}', updated);
+  out = out.replaceAll('{{UPDATED}}', updated);
   writeFileSync('index.html', out, 'utf-8');
   console.log(`完成：题库 ${lib.length} 条，本次新增 ${added} 条，页面展示 ${display.length} 条，更新日期 ${updated}`);
 }
