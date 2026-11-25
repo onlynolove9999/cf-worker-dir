@@ -155,13 +155,6 @@
       color: #ffffff;
     }
 
-    .shuffle-btn {
-      background: #f5a623;
-      border-color: #f5a623;
-      color: #ffffff;
-      font-weight: 700;
-    }
-
     /* 卡片网格 */
     .main-wrapper {
       width: 100%;
@@ -342,7 +335,6 @@
     <button class="filter-btn" data-cat="food">食品保鲜</button>
     <button class="filter-btn" data-cat="health">健康日常</button>
     <button class="filter-btn" data-cat="storage">收纳出行</button>
-    <button class="filter-btn shuffle-btn" id="shuffleBtn" type="button">换一批</button>
   </div>
 
   <main class="main-wrapper" id="tips">
@@ -619,10 +611,6 @@
       var TAG = { home: '家居清洁', kitchen: '厨房妙招', clothes: '衣物护理', food: '食品保鲜', health: '健康日常', storage: '收纳出行' };
       var grid = document.getElementById('tipGrid');
       var buttons = document.querySelectorAll('.filter-btn[data-cat]');
-      var shuffleBtn = document.getElementById('shuffleBtn');
-      var allTips = [];
-      var queue = [];
-      var loadingMore = false;
       var currentFilter = 'all';
       function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
       function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
@@ -635,17 +623,6 @@
           card.style.display = (currentFilter === 'all' || card.getAttribute('data-cat') === currentFilter) ? '' : 'none';
         });
       }
-      function renderBatch(list, append) {
-        var html = list.map(cardHtml).join('');
-        if (append) { grid.insertAdjacentHTML('beforeend', html); } else { grid.innerHTML = html; }
-        applyFilter();
-      }
-      function showNewBatch() {
-        if (!allTips.length) return;
-        queue = shuffle(allTips.slice());
-        renderBatch(queue.splice(0, 39), false);
-        window.scrollTo({ top: document.getElementById('tips').offsetTop - 70, behavior: 'smooth' });
-      }
       buttons.forEach(function (btn) {
         btn.addEventListener('click', function () {
           buttons.forEach(function (b) { b.classList.remove('active'); });
@@ -654,21 +631,12 @@
           applyFilter();
         });
       });
-      if (shuffleBtn) { shuffleBtn.addEventListener('click', showNewBatch); }
-      window.addEventListener('scroll', function () {
-        if (loadingMore || currentFilter !== 'all' || !queue.length) return;
-        if (window.innerHeight + window.scrollY > document.body.scrollHeight - 800) {
-          loadingMore = true;
-          renderBatch(queue.splice(0, 18), true);
-          if (!queue.length) { queue = shuffle(allTips.slice()); }
-          loadingMore = false;
-        }
-      });
+      // 只在页面打开/刷新时，从后台 data/tips.json 随机取 39 条（3x13），不往下续加载
       fetch('data/tips.json').then(function (r) { return r.json(); }).then(function (lib) {
         if (!lib || !lib.length || lib.length <= 39) return;
-        allTips = lib;
-        queue = shuffle(lib.slice());
-        renderBatch(queue.splice(0, 39), false);
+        var batch = shuffle(lib.slice()).slice(0, 39);
+        grid.innerHTML = batch.map(cardHtml).join('');
+        applyFilter();
       }).catch(function () { });
     })();
   </script>
