@@ -84,6 +84,17 @@
       opacity: 0.92;
     }
 
+    .update-badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
     /* 今日推荐 */
     .daily {
       max-width: 1200px;
@@ -166,9 +177,17 @@
 
     .tip-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .tip-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .tip-grid { grid-template-columns: 1fr; }
     }
 
     .tip-card {
@@ -284,10 +303,18 @@
     /* 页脚 */
     .footer {
       text-align: center;
-      color: #999999;
-      font-size: 13.5px;
+      color: #666666;
+      font-size: 14px;
       padding: 30px 20px 36px;
       line-height: 2;
+    }
+
+    .update-time {
+      display: inline-block;
+      margin-top: 6px;
+      color: #2ba245;
+      font-size: 16px;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -307,6 +334,7 @@
   <section class="banner">
     <h1>每天学一招，日子更轻松</h1>
     <p>家居、厨房、衣物、保鲜、健康、收纳——把麻烦事变简单的小窍门，都在这里。</p>
+    <p class="update-badge">最后更新：{{UPDATED}}</p>
   </section>
 
   <section class="daily">
@@ -354,7 +382,8 @@
 
   <footer class="footer">
     生活小妙招 · 每天学一招，日子更轻松<br>
-    © 2026 生活小妙招 版权所有 · 内容每日自动更新，最后更新 {{UPDATED}}
+    © 2026 生活小妙招 版权所有 · 内容每日自动更新<br>
+    <span class="update-time">最后更新：{{UPDATED}}</span>
   </footer>
 
   <script>
