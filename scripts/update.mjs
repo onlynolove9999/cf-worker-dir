@@ -1,7 +1,7 @@
 // 生活小妙招 · 自动更新程序
 // 1) 到 zh.wikihow.com 首页抓取最新指南文章，过滤出生活类标题，进文章页取首段作妙招内容
 // 2) 新内容并入 data/tips.json 题库（去重、种子条目永不淘汰）
-// 3) 按日期轮换题库选出 37 条渲染 template.html -> index.html，保证页面每天都有变化
+// 3) 按日期轮换题库选出 39 条渲染 template.html -> index.html，保证页面每天都有变化
 // 抓不到新内容时仅靠轮换更新，程序不会失败退出。
 import { readFileSync, writeFileSync } from 'node:fs';
 
@@ -104,7 +104,7 @@ async function main() {
   const dayIndex = Math.floor(Date.now() / 86400000);
   const offset = lib.length ? dayIndex % lib.length : 0;
   const rotated = lib.slice(offset).concat(lib.slice(0, offset));
-  const display = rotated.slice(0, 38);
+  const display = rotated.slice(0, 39);
   const daily = rotated[0] || { t: '', x: '' };
   const rank = rotated.slice(1, 11);
 
